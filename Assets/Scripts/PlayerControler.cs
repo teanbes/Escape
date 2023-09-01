@@ -9,7 +9,7 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private float impulseForce;
     [SerializeField] private Transform indicator;
-
+    [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private AnimationCurve impulseCurve;
     [SerializeField] private AnimationCurve indicatorCurve;
     private Rigidbody rb;
@@ -25,11 +25,12 @@ public class PlayerControler : MonoBehaviour
 
     void Update()
     {
+        groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
         // Cast a ray from the mouse cursor into the world
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         //RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit) && isImpulsing == false)
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask) && isImpulsing == false)
         {
             // Calculate the direction from the object to the hit point
             Vector3 direction = hit.point - transform.position;
@@ -45,32 +46,28 @@ public class PlayerControler : MonoBehaviour
             }
         }
 
+        // Get the mouse start position to calculate impulse force
         if (Input.GetMouseButtonDown(0)) 
         {
             isImpulsing = true;
-
-            // Get the mouse start position to calculate impulse force
             impulseInitPosition = hit.point;
-
-            
         }
 
+        // Update arrow indicator
         if (Input.GetMouseButton(0))
         {
-            // Calculate distance between mouse inputs
+            
             float indicatorDistance = Vector3.Distance(impulseInitPosition, hit.point);
             float indicatorSize = indicatorCurve.Evaluate(indicatorDistance);
-            Debug.Log("indicator distance: " + indicatorDistance);
+            
             if (indicatorDistance > 1f)
             {
                 indicator.localScale = new Vector3(1.0f, 1.0f, indicatorSize);
             }
-
-            //Debug.Log("impulsing'");
-            
+   
         }
-        
 
+        // Get the mouse end position and calculate impulse force
         if (Input.GetMouseButtonUp(0)) 
         {
             isImpulsing = false;
@@ -87,7 +84,6 @@ public class PlayerControler : MonoBehaviour
 
             indicator.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-            Debug.Log("Impulse force: " + impulseForce);
         }
 
     }
