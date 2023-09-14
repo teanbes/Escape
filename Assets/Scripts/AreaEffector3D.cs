@@ -10,16 +10,15 @@ public class AreaEffector3D : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.GetComponent<PlayerControler>())
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
 
-            if (rb)
-            {
+                Debug.Log("Flyiiingggg");
                 float displacementRatio = Mathf.Clamp01(rb.position.y / maxUpwardDisplacement);
                 Vector3 upwardForceVector = Vector3.up * upwardForce * displacementRatio * upwardForceFactor;
                 rb.AddForce(upwardForceVector, ForceMode.Acceleration);
-            }
+            
         }
     }
 

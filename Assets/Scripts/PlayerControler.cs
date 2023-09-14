@@ -9,7 +9,7 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private float impulseForce;
     [SerializeField] private Transform indicator;
-    [SerializeField] private LayerMask groundLayerMask;
+    private LayerMask groundLayerMask;
     [SerializeField] private AnimationCurve impulseCurve;
     [SerializeField] private AnimationCurve indicatorCurve;
     private Rigidbody rb;
