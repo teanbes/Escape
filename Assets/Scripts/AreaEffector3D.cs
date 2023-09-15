@@ -14,11 +14,13 @@ public class AreaEffector3D : MonoBehaviour
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
 
+            if (rb)
+            {
                 Debug.Log("Flyiiingggg");
                 float displacementRatio = Mathf.Clamp01(rb.position.y / maxUpwardDisplacement);
                 Vector3 upwardForceVector = Vector3.up * upwardForce * displacementRatio * upwardForceFactor;
                 rb.AddForce(upwardForceVector, ForceMode.Acceleration);
-            
+            }
         }
     }
 

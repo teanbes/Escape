@@ -18,18 +18,29 @@ public class PlayerControler : MonoBehaviour
     private Vector3 impulseInitPosition;
     private RaycastHit hit;
 
+    // Multiplayer Variables
+    private GameManager gameManager; // Reference to the GameManager
+    public int playerNumber; // 1 for player 1, 2 for player 2
+    public bool isCurrentPlayerTurn; 
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        gameManager = FindObjectOfType<GameManager>();
+        isCurrentPlayerTurn = playerNumber == 1; // Player 1 starts first
     }
 
     void Update()
     {
+        if (!isCurrentPlayerTurn)
+            return; // Skip input if it's not the current player's turn
+
         groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
         // Cast a ray from the mouse cursor into the world
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        //RaycastHit hit;
 
+        Debug.Log("Player " + playerNumber + " Update");
+        //RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask) && isImpulsing == false)
         {
             // Calculate the direction from the object to the hit point
@@ -84,13 +95,20 @@ public class PlayerControler : MonoBehaviour
 
             indicator.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
+            // Switch turns
+            StartCoroutine(DelayedTurnSwitch());
+
         }
 
     }
 
-    private void OnDrawGizmos()
+    private IEnumerator DelayedTurnSwitch()
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, hit.point);
+        // Delay for a short duration (e.g., 0.5 seconds)
+        yield return new WaitForSeconds(0.5f);
+
+        // Switch turns after the delay
+        gameManager.SwitchTurn();
     }
+
 }
