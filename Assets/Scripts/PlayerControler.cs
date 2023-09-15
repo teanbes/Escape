@@ -99,13 +99,12 @@ public class PlayerControler : MonoBehaviour
             StartCoroutine(DelayedTurnSwitch());
 
         }
-
+        
     }
 
     private IEnumerator DelayedTurnSwitch()
     {
-        // Delay for a short duration (e.g., 0.5 seconds)
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3f);
 
         // Switch turns after the delay
         gameManager.SwitchTurn();

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1;
         // Set the initial active camera to follow Player 1
         player1Camera.SetActive(true);
         player2Camera.SetActive(false);
@@ -41,5 +43,15 @@ public class GameManager : MonoBehaviour
             player1.isCurrentPlayerTurn = true;
             player2.isCurrentPlayerTurn = false;
         }
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void GameQuit()
+    {
+        UnityEditor.EditorApplication.isPlaying = false;
     }
 }
