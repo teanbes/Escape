@@ -14,6 +14,7 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private AnimationCurve indicatorCurve;
     private Rigidbody rb;
     private bool isImpulsing;
+    
     private float impulseDistance;
     private Vector3 impulseInitPosition;
     private RaycastHit hit;
@@ -21,12 +22,14 @@ public class PlayerControler : MonoBehaviour
     // Multiplayer Variables
     private GameManager gameManager; // Reference to the GameManager
     public int playerNumber; // 1 for player 1, 2 for player 2
-    public bool isCurrentPlayerTurn; 
+    public bool isCurrentPlayerTurn;
+    public bool isTurnEnded;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         gameManager = FindObjectOfType<GameManager>();
+        isTurnEnded = false;
         isCurrentPlayerTurn = playerNumber == 1; // Player 1 starts first
     }
 
@@ -35,50 +38,54 @@ public class PlayerControler : MonoBehaviour
         if (!isCurrentPlayerTurn)
             return; // Skip input if it's not the current player's turn
 
-        groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
-
-        CalculateImpulseDirection();
-        // Get the mouse start position to calculate impulse force
-        if (Input.GetMouseButtonDown(0)) 
+        if (!isTurnEnded)
         {
-            isImpulsing = true;
-            impulseInitPosition = hit.point;
-        }
+            groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
 
-        // Update arrow indicator
-        if (Input.GetMouseButton(0))
-        {
-            
-            float indicatorDistance = Vector3.Distance(impulseInitPosition, hit.point);
-            float indicatorSize = indicatorCurve.Evaluate(indicatorDistance);
-            
-            if (indicatorDistance > 1f)
+            CalculateImpulseDirection();
+            // Get the mouse start position to calculate impulse force
+            if (Input.GetMouseButtonDown(0)) 
             {
-                indicator.localScale = new Vector3(1.0f, 1.0f, indicatorSize);
+                isImpulsing = true;
+                impulseInitPosition = hit.point;
             }
+
+            // Update arrow indicator
+            if (Input.GetMouseButton(0))
+            {
+            
+                float indicatorDistance = Vector3.Distance(impulseInitPosition, hit.point);
+                float indicatorSize = indicatorCurve.Evaluate(indicatorDistance);
+            
+                if (indicatorDistance > 1f)
+                {
+                    indicator.localScale = new Vector3(1.0f, 1.0f, indicatorSize);
+                }
    
-        }
+            }
 
-        // Get the mouse end position and calculate impulse force
-        if (Input.GetMouseButtonUp(0)) 
-        {
-            isImpulsing = false;
+            // Get the mouse end position and calculate impulse force
+            if (Input.GetMouseButtonUp(0)) 
+            {
+                isImpulsing = false;
+                isTurnEnded = true;
 
-            // Get the mouse end position to calculate impulse force
-            Vector3 impulseEndPosition = hit.point;
-            // Calculate distance between mouse inputs
-            impulseDistance = Vector3.Distance(impulseInitPosition, impulseEndPosition);
+                // Get the mouse end position to calculate impulse force
+                Vector3 impulseEndPosition = hit.point;
+                // Calculate distance between mouse inputs
+                impulseDistance = Vector3.Distance(impulseInitPosition, impulseEndPosition);
 
-            // Calculate impulseForce acording to curve
-            impulseForce = impulseCurve.Evaluate(impulseDistance);
-             // Aply impulse force
-            rb.AddForce(transform.forward * impulseForce, ForceMode.Acceleration);
+                // Calculate impulseForce acording to curve
+                impulseForce = impulseCurve.Evaluate(impulseDistance);
+                 // Aply impulse force
+                rb.AddForce(transform.forward * impulseForce, ForceMode.Acceleration);
 
-            indicator.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                indicator.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-            // Switch turns
-            StartCoroutine(DelayedTurnSwitch());
+                // Switch turns
+                StartCoroutine(DelayedTurnSwitch());
 
+            }
         }
         
     }

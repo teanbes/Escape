@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
             player2Camera.SetActive(true);
             player1.isCurrentPlayerTurn = false;
             player2.isCurrentPlayerTurn = true;
+            player1.isTurnEnded = false;
         }
         else
         {
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
             player1Camera.SetActive(true);
             player1.isCurrentPlayerTurn = true;
             player2.isCurrentPlayerTurn = false;
+            player2.isTurnEnded = false;
         }
     }
 
