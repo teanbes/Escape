@@ -36,27 +36,8 @@ public class PlayerControler : MonoBehaviour
             return; // Skip input if it's not the current player's turn
 
         groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
-        // Cast a ray from the mouse cursor into the world
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
-        Debug.Log("Player " + playerNumber + " Update");
-        //RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask) && isImpulsing == false)
-        {
-            // Calculate the direction from the object to the hit point
-            Vector3 direction = hit.point - transform.position;
-            direction.y = 0f; // Keep the rotation in the y-axis
-
-            if (direction != Vector3.zero)
-            {
-                // Calculate the rotation needed to look at the hit point
-                Quaternion rotation = Quaternion.LookRotation(direction);
-
-                // Apply the rotation to the object's y-axis
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
-            }
-        }
-
+        CalculateImpulseDirection();
         // Get the mouse start position to calculate impulse force
         if (Input.GetMouseButtonDown(0)) 
         {
@@ -100,6 +81,30 @@ public class PlayerControler : MonoBehaviour
 
         }
         
+    }
+
+    private void CalculateImpulseDirection()
+    {
+         // Cast a ray from the mouse cursor into the world
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+        Debug.Log("Player " + playerNumber + " Update");
+        //RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
+        {
+            // Calculate the direction from the object to the hit point
+            Vector3 direction = hit.point - transform.position;
+            direction.y = 0f; // Keep the rotation in the y-axis
+
+            if (direction != Vector3.zero)
+            {
+                // Calculate the rotation needed to look at the hit point
+                Quaternion rotation = Quaternion.LookRotation(direction);
+
+                // Apply the rotation to the object's y-axis
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
+            }
+        }
     }
 
     private IEnumerator DelayedTurnSwitch()
