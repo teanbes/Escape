@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class PlayerControler : MonoBehaviour
 {
     [SerializeField] private Camera cam;
     [SerializeField] private float impulseForce;
     [SerializeField] private Transform indicator;
+    [field: SerializeField] public Transform ThisPlayerSpawnPoint { get; private set; }
     private LayerMask groundLayerMask;
     [SerializeField] private AnimationCurve impulseCurve;
     [SerializeField] private AnimationCurve indicatorCurve;

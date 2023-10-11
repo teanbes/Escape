@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 20765145773263934}
   - component: {fileID: 5126238423994937953}
-  - component: {fileID: 469739110543688297}
+  - component: {fileID: 6545597888213733255}
   - component: {fileID: 1307920838602337549}
+  - component: {fileID: 5352982404280360362}
   m_Layer: 0
   m_Name: WheelPlayer
   m_TagString: Player
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 3609237417901585048}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.513}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -44,7 +45,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3609237417901585048}
   serializedVersion: 4
-  m_Mass: 2
+  m_Mass: 4
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -62,9 +63,9 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
---- !u!65 &469739110543688297
-BoxCollider:
+  m_CollisionDetection: 1
+--- !u!136 &6545597888213733255
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -81,9 +82,11 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.6489787, y: 0.8809035, z: 1.0172323}
-  m_Center: {x: 0.006268263, y: 0.44045174, z: 0.18721461}
+  serializedVersion: 2
+  m_Radius: 0.4936192
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 6.8746364e-10, y: 0, z: 0.14361924}
 --- !u!114 &1307920838602337549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,9 +102,6 @@ MonoBehaviour:
   cam: {fileID: 0}
   impulseForce: 0
   indicator: {fileID: 460881640619830621}
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
   impulseCurve:
     serializedVersion: 2
     m_Curve:
@@ -131,7 +131,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -150,6 +150,23 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  playerNumber: 1
+  isCurrentPlayerTurn: 1
+  isTurnEnded: 0
+--- !u!114 &5352982404280360362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3609237417901585048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59bdff7b9fa955142bc210e21584bc03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSpawnPoint: {fileID: 0}
+  threshold: 10
 --- !u!1001 &3961137436521178433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -176,7 +193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3503141816645732380, guid: 77243602b8e3ce242995849459f288ec, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.513
       objectReference: {fileID: 0}
     - target: {fileID: 3503141816645732380, guid: 77243602b8e3ce242995849459f288ec, type: 3}
       propertyPath: m_LocalPosition.z
@@ -210,7 +227,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6805355637363109022, guid: 77243602b8e3ce242995849459f288ec, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -232,13 +250,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: WheelChair_1
       objectReference: {fileID: 0}
+    - target: {fileID: 1000011410231206, guid: 36ef39b1bddd4ec46a415ecd92e443be, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 4000011275515848, guid: 36ef39b1bddd4ec46a415ecd92e443be, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000011275515848, guid: 36ef39b1bddd4ec46a415ecd92e443be, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.493
       objectReference: {fileID: 0}
     - target: {fileID: 4000011275515848, guid: 36ef39b1bddd4ec46a415ecd92e443be, type: 3}
       propertyPath: m_LocalPosition.z
@@ -280,7 +302,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64000012810253388, guid: 36ef39b1bddd4ec46a415ecd92e443be, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

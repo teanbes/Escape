@@ -8,8 +8,10 @@ public class SlipEffector3D : MonoBehaviour
     private Rigidbody playerRigidbody;
     private float initialSpeed;
     private bool isInsideCollider;
+
     [SerializeField] private float slideSpeedFactor = 1.3f;
     [SerializeField] private float slowdownFactor = 1.3f;
+    [SerializeField] private GameObject splashParticles;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -18,6 +20,7 @@ public class SlipEffector3D : MonoBehaviour
             playerRigidbody = other.GetComponent<Rigidbody>();
             if (playerRigidbody)
             {
+                splashParticles.SetActive(true);
                 initialSpeed = playerRigidbody.velocity.magnitude;
                 isInsideCollider = true;
             }
@@ -28,10 +31,10 @@ public class SlipEffector3D : MonoBehaviour
     {
         if (isInsideCollider && playerRigidbody)
         {
-            // Calculate the slide speed proportionally based on the initial speed
+            // Calculate sliding speed proportionally based on the initial speed
             float slideSpeed = initialSpeed * slideSpeedFactor;
 
-            // Apply a force to maintain the sliding speed
+            // Apply force to maintain sliding speed
             Vector3 slideForce = playerRigidbody.velocity.normalized * slideSpeed;
             playerRigidbody.AddForce(slideForce - playerRigidbody.velocity, ForceMode.VelocityChange);
         }
@@ -41,9 +44,10 @@ public class SlipEffector3D : MonoBehaviour
     {
         if (isInsideCollider && playerRigidbody)
         {
-            // Slow down the player proportionally based on the initial speed
+            // Slow down the player speed 
             playerRigidbody.velocity *= slowdownFactor;
 
+            splashParticles.SetActive(false);
             isInsideCollider = false;
             playerRigidbody = null;
         }
